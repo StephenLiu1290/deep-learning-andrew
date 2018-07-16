@@ -284,8 +284,8 @@ def linear_backward(dZ, cache):
     A_prev, W, b = cache
     m = A_prev.shape[1]
 
-    dW = 1./m * np.dot(dZ,A_prev.T)
-    db = 1./m * np.sum(dZ, axis = 1, keepdims = True)
+    dW = np.dot(dZ,A_prev.T)
+    db = np.sum(dZ, axis = 1, keepdims = True)
     dA_prev = np.dot(W.T,dZ)
     
     assert (dA_prev.shape == A_prev.shape)
@@ -343,19 +343,19 @@ def L_model_backward(AL, Y, caches):
     Y = Y.reshape(AL.shape) # after this line, Y is the same shape as AL
     
     # Initializing the backpropagation
-    dAL = - (np.divide(Y, AL) - np.divide(1 - Y, 1 - AL))
+    dAL = - (np.divide(Y, AL) - np.divide(1 - Y, 1 - AL)) / m
     
     # Lth layer (SIGMOID -> LINEAR) gradients. Inputs: "AL, Y, caches". Outputs: "grads["dAL"], grads["dWL"], grads["dbL"]
     current_cache = caches[L-1]
-    grads["dA" + str(L-1)], grads["dW" + str(L)], grads["db" + str(L)] = linear_activation_backward(dAL, current_cache, activation = "sigmoid")
+    grads["dA"+str(L-1)], grads["dW"+str(L)], grads["db"+str(L)] = linear_activation_backward(dAL, current_cache, activation = "sigmoid")
     
     for l in reversed(range(L-1)):
         # lth layer: (RELU -> LINEAR) gradients.
         current_cache = caches[l]
-        dA_prev_temp, dW_temp, db_temp = linear_activation_backward(grads["dA" + str(l + 1)], current_cache, activation = "relu")
+        dA_prev_temp, dW_temp, db_temp = linear_activation_backward(grads["dA"+str(l+1)], current_cache, activation = "relu")
         grads["dA" + str(l)] = dA_prev_temp
-        grads["dW" + str(l + 1)] = dW_temp
-        grads["db" + str(l + 1)] = db_temp
+        grads["dW" + str(l+1)] = dW_temp
+        grads["db" + str(l+1)] = db_temp
 
     return grads
 
@@ -424,6 +424,7 @@ def print_mislabeled_images(classes, X, y, p):
     p -- predictions
     """
     a = p + y
+    # output the coordinates of a==1
     mislabeled_indices = np.asarray(np.where(a == 1))
     plt.rcParams['figure.figsize'] = (40.0, 40.0) # set default size of plots
     num_images = len(mislabeled_indices[0])
