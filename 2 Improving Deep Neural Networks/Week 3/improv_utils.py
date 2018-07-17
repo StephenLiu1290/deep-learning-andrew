@@ -20,7 +20,7 @@ def load_dataset():
     return train_set_x_orig, train_set_y_orig, test_set_x_orig, test_set_y_orig, classes
 
 
-def random_mini_batches(X, Y, mini_batch_size = 64, seed = 0):
+def random_mini_batches(X, Y, mini_batch_size=64, seed=0):
     """
     Creates a list of random minibatches from (X, Y)
     
@@ -33,7 +33,6 @@ def random_mini_batches(X, Y, mini_batch_size = 64, seed = 0):
     Returns:
     mini_batches -- list of synchronous (mini_batch_X, mini_batch_Y)
     """
-    
     m = X.shape[1]                  # number of training examples
     mini_batches = []
     np.random.seed(seed)
@@ -86,7 +85,7 @@ def predict(X, parameters):
     p = tf.argmax(z3)
     
     with tf.Session() as sess:
-        prediction = sess.run(p, feed_dict = {x: X})
+        prediction = sess.run(p, feed_dict={x: X})
         
     return prediction
     
@@ -133,12 +132,12 @@ def initialize_parameters():
     tf.set_random_seed(1)                              # so that your "random" numbers match ours
         
     ### START CODE HERE ### (approx. 6 lines of code)
-    W1 = tf.get_variable("W1", [25,12288], initializer = tf.contrib.layers.xavier_initializer(seed = 1))
-    b1 = tf.get_variable("b1", [25,1], initializer = tf.zeros_initializer())
-    W2 = tf.get_variable("W2", [12,25], initializer = tf.contrib.layers.xavier_initializer(seed = 1))
-    b2 = tf.get_variable("b2", [12,1], initializer = tf.zeros_initializer())
-    W3 = tf.get_variable("W3", [6,12], initializer = tf.contrib.layers.xavier_initializer(seed = 1))
-    b3 = tf.get_variable("b3", [6,1], initializer = tf.zeros_initializer())
+    W1 = tf.get_variable("W1", [25,12288], initializer=tf.contrib.layers.xavier_initializer(seed=1))
+    b1 = tf.get_variable("b1", [25,1], initializer=tf.zeros_initializer())
+    W2 = tf.get_variable("W2", [12,25], initializer=tf.contrib.layers.xavier_initializer(seed=1))
+    b2 = tf.get_variable("b2", [12,1], initializer=tf.zeros_initializer())
+    W3 = tf.get_variable("W3", [6,12], initializer=tf.contrib.layers.xavier_initializer(seed=1))
+    b3 = tf.get_variable("b3", [6,1], initializer=tf.zeros_initializer())
     ### END CODE HERE ###
 
     parameters = {"W1": W1,
@@ -168,9 +167,8 @@ def compute_cost(z3, Y):
     labels = tf.transpose(Y)
     
     ### START CODE HERE ### (1 line of code)
-    cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits = logits, labels = labels))
+    cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=labels))
     ### END CODE HERE ###
-    
     return cost
 
 
@@ -179,8 +177,8 @@ def compute_cost(z3, Y):
 
 
 
-def model(X_train, Y_train, X_test, Y_test, learning_rate = 0.0001,
-          num_epochs = 1500, minibatch_size = 32, print_cost = True):
+def model(X_train, Y_train, X_test, Y_test, learning_rate=0.0001,
+          num_epochs=1500, minibatch_size=32, print_cost=True):
     """
     Implements a three-layer tensorflow neural network: LINEAR->RELU->LINEAR->RELU->LINEAR->SOFTMAX.
     
@@ -227,7 +225,7 @@ def model(X_train, Y_train, X_test, Y_test, learning_rate = 0.0001,
     
     # Backpropagation: Define the tensorflow optimizer. Use an AdamOptimizer.
     ### START CODE HERE ### (1 line)
-    optimizer = tf.train.AdamOptimizer(learning_rate = learning_rate).minimize(cost)
+    optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
     ### END CODE HERE ###
     
     # Initialize all the variables
