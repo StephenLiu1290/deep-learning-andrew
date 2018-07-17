@@ -1,1 +1,1 @@
-my exercise in deep learning from coursera.
+my code in deep learning from coursera.
